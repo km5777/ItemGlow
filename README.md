@@ -20,23 +20,45 @@ Item Glow is a client-side mod that displays essential information about the ite
 
 ### Key Features
 
-<div align="center">
-  <h4>🛡️ Combat Info & Durability</h4>
-  <p>See exactly how many uses are left on your tools and armor. I've included a color-coded bar and numerical values that update in real-time.</p>
-  <img src="docs/images/netherritesword.png" width="400" style="border-radius: 12px; margin: 10px 0;"/>
-</div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="55%" align="center" valign="middle">
+      <img src="docs/images/netherritesword.png" width="450" style="border-radius: 15px;"/>
+    </td>
+    <td width="45%" valign="middle" style="padding-left: 20px;">
+      <h4>🛡️ Combat Info & Durability</h4>
+      <p>See exactly how many uses are left on your tools and armor. I've included a color-coded bar and numerical values that update in real-time as you use your gear.</p>
+    </td>
+  </tr>
+</table>
 
-<div align="center">
-  <h4>📜 Enchantment & Effect Cycling</h4>
-  <p>If an item has multiple enchantments or potion effects, the HUD cycles through them automatically. It keeps the screen uncluttered while making sure you know exactly what you're holding.</p>
-  <img src="docs/images/enchantbook.png" width="400" style="border-radius: 12px; margin: 10px 0;"/>
-</div>
+<br/>
 
-<div align="center">
-  <h4>🍎 Food & Utility Data</h4>
-  <p>Holding food? You'll see nutrition and saturation values. Holding a painting? You'll see its size and variant before placing it. I've added support for many special items like Golden Apples and Suspicious Stews.</p>
-  <img src="docs/images/goldapple.png" width="400" style="border-radius: 12px; margin: 10px 0;"/>
-</div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="45%" valign="middle" style="padding-right: 20px;">
+      <h4>📜 Enchantment & Effect Cycling</h4>
+      <p>If an item has multiple enchantments or potion effects, the HUD cycles through them automatically. It keeps the screen uncluttered while making sure you know exactly what you're holding.</p>
+    </td>
+    <td width="55%" align="center" valign="middle">
+      <img src="docs/images/enchantbookpill.png" width="450" style="border-radius: 15px;"/>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="55%" align="center" valign="middle">
+      <img src="docs/images/goldapple.png" width="450" style="border-radius: 15px;"/>
+    </td>
+    <td width="45%" valign="middle" style="padding-left: 20px;">
+      <h4>🍎 Food & Utility Data</h4>
+      <p>Holding food? You'll see nutrition and saturation values. Holding a painting? You'll see its size and variant before placing it. I've added support for many special items like Golden Apples and Suspicious Stews.</p>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -67,17 +89,17 @@ ItemGlowApi.registerProvider((stack, player) -> {
 ```
 
 #### Why Integrate?
-<table width="100%">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="70%" valign="top">
+    <td width="60%" valign="top">
       <ul>
         <li><b>Zero UI Conflict:</b> Your data renders in a style consistent with the rest of the HUD.</li>
         <li><b>User Preference:</b> Users can scale, move, and toggle your data just like native elements.</li>
         <li><b>Efficiency:</b> I've optimized the rendering engine to ensure minimal impact on performance.</li>
       </ul>
     </td>
-    <td width="30%" align="center" valign="top">
-      <img src="docs/images/manabar.png" width="200" style="border-radius: 10px;"/>
+    <td width="40%" align="center" valign="top">
+      <img src="docs/images/manabar.png" width="250" style="border-radius: 12px;"/>
     </td>
   </tr>
 </table>
