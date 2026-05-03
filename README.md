@@ -1,7 +1,7 @@
 <div align="center">
   <img src="docs/images/logo.png" width="250" alt="Item Glow Logo" style="border-radius: 20px;"/>
   <h1>Item Glow</h1>
-  <p>A functional and highly customizable item HUD for Minecraft 1.21.1 - 1.21.11</p>
+  <p>A functional and highly customizable item HUD for Minecraft 1.21.1</p>
 
   <p>
     <a href="https://modrinth.com/mod/item-glow-(java)"><img src="https://img.shields.io/badge/Modrinth-00AF5C?style=for-the-badge&logo=modrinth&logoColor=white" /></a>
