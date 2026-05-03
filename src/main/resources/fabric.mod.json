@@ -8,7 +8,7 @@
 		"K_M577"
 	],
 	"contact": {
-		"wiki": "https://km5777.github.io/ItemGlow/",
+		"homepage": "https://km5777.github.io/ItemGlow/",
 		"sources": "https://github.com/km5777/ItemGlow",
 		"issues": "https://github.com/km5777/ItemGlow/issues",
 		"donation": "https://www.paypal.com/donate?token=elNZNapST-z28m88rwdBxMGMxu9C6HetcvJuNdJtdSLSRm9uwXEztr6x9mjz3IVpQAAoOzdnhNLRsZ26&locale.x=US"
@@ -24,6 +24,13 @@
 		"modmenu": [
 			"com.itemglow.ItemGlowModMenu"
 		]
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.donate": "https://www.paypal.com/donate?token=elNZNapST-z28m88rwdBxMGMxu9C6HetcvJuNdJtdSLSRm9uwXEztr6x9mjz3IVpQAAoOzdnhNLRsZ26&locale.x=US"
+			}
+		}
 	},
 	"mixins": [
 		"item-glow.mixins.json"
