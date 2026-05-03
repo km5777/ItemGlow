@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "itemglow",
+	"version": "${version}",
+	"name": "Item Glow",
+	"description": "Displays a clean HUD element for held items.",
+	"authors": [
+		"K_M577"
+	],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/itemglow/icon.png",
+	"environment": "client",
+	"accessWidener": "itemglow.accesswidener",
+	"entrypoints": {
+		"client": [
+			"com.itemglow.ItemGlowMod"
+		],
+		"modmenu": [
+			"com.itemglow.ItemGlowModMenu"
+		]
+	},
+	"mixins": [
+		"item-glow.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
