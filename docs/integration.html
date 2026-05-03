@@ -97,14 +97,14 @@
                         <span>ManaIntegration.java</span>
                         <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
                     </div>
-                    <pre><code id="code-block"><span class="keyword">public class</span> ManaIntegration <span class="keyword">implements</span> ItemGlowAPI.ItemGlowProvider {
+                    <pre><code id="code-block"><span class="keyword">public class</span> ManaIntegration <span class="keyword">implements</span> ItemGlowApi.ItemGlowProvider {
     <span class="keyword">@Override</span>
-    <span class="keyword">public</span> List&lt;ItemGlowAPI.TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack) {
-        List&lt;ItemGlowAPI.TooltipLine&gt; lines = <span class="keyword">new</span> ArrayList&lt;&gt;();
+    <span class="keyword">public</span> List&lt;ItemGlowApi.TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack) {
+        List&lt;ItemGlowApi.TooltipLine&gt; lines = <span class="keyword">new</span> ArrayList&lt;&gt;();
 
         <span class="keyword">if</span> (stack.contains(ManaMod.COST_COMPONENT)) {
             <span class="keyword">int</span> cost = stack.get(ManaMod.COST_COMPONENT);
-            lines.add(<span class="keyword">new</span> ItemGlowAPI.TooltipLine(
+            lines.add(<span class="keyword">new</span> ItemGlowApi.TooltipLine(
                 Text.literal(<span class="string">"Cost: "</span> + cost + <span class="string">" Mana"</span>), 
                 <span class="string">0x55AAFF</span>, 
                 <span class="keyword">150</span>
@@ -128,16 +128,16 @@
                 <p>If you need to extract data from a mod that doesn't have an API, you can "scrape" its vanilla tooltips. This is the ultimate fallback for universal compatibility.</p>
                 
                 <div class="code-wrapper">
-                    <pre><code><span class="keyword">public class</span> Scraper <span class="keyword">implements</span> ItemGlowAPI.ItemGlowProvider {
+                    <pre><code><span class="keyword">public class</span> Scraper <span class="keyword">implements</span> ItemGlowApi.ItemGlowProvider {
     <span class="keyword">@Override</span>
-    <span class="keyword">public</span> List&lt;ItemGlowAPI.TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack) {
+    <span class="keyword">public</span> List&lt;ItemGlowApi.TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack) {
         <span class="comment">// Force tooltip generation</span>
         <span class="keyword">var</span> tooltip = stack.getTooltip(..., TooltipType.BASIC);
         
         <span class="comment">// Look for specific keywords</span>
         <span class="keyword">return</span> tooltip.stream()
             .filter(t -&gt; t.getString().contains(<span class="string">"Weight:"</span>))
-            .map(t -&gt; <span class="keyword">new</span> ItemGlowAPI.TooltipLine(t, <span class="string">0xAAAAAA</span>, <span class="keyword">50</span>))
+            .map(t -&gt; <span class="keyword">new</span> ItemGlowApi.TooltipLine(t, <span class="string">0xAAAAAA</span>, <span class="keyword">50</span>))
             .toList();
     }
 }</code></pre>

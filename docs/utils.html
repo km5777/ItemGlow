@@ -66,7 +66,7 @@
     <span class="keyword">int</span> color = (<span class="keyword">int</span>)(alpha * <span class="keyword">255</span>) &lt;&lt; <span class="keyword">24</span> | <span class="keyword">0xFFAA00</span>;
     
     <span class="comment">// This will automatically shrink the long string to fit within mW</span>
-    ItemGlowAPI.drawScaledText(ctx, client, customText, x, y, mW, color);
+    ItemGlowApi.drawScaledText(ctx, client, customText, x, y, mW, color);
     
     <span class="keyword">return</span> <span class="keyword">10</span>;
 }</code></pre>
@@ -135,12 +135,12 @@
 myPills.add(<span class="keyword">new</span> Pill(<span class="string">"Soul Bound"</span>, <span class="keyword">0x5500AAFF</span>, <span class="keyword">0xFFFFFF</span>, <span class="keyword">false</span>, alpha, <span class="keyword">0</span>, <span class="keyword">true</span>));
 
 <span class="comment">// 1. Basic rendering</span>
-<span class="keyword">int</span> heightUsed = ItemGlowAPI.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);
+<span class="keyword">int</span> heightUsed = ItemGlowApi.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);
 
 <span class="comment">// 2. OR: Use addCyclePills for scrolling animations</span>
 <span class="keyword">List</span>&lt;<span class="keyword">String</span>&gt; overflowItems = List.of(<span class="string">"Effect 1"</span>, <span class="string">"Effect 2"</span>, <span class="string">"Effect 3"</span>);
-ItemGlowAPI.addCyclePills(myPills, overflowItems, <span class="keyword">0x555555</span>, <span class="keyword">0xFFFFFF</span>, age, <span class="keyword">2.0f</span>);
-ItemGlowAPI.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);</code></pre>
+ItemGlowApi.addCyclePills(myPills, overflowItems, <span class="keyword">0x555555</span>, <span class="keyword">0xFFFFFF</span>, age, <span class="keyword">2.0f</span>);
+ItemGlowApi.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);</code></pre>
                 </div>
             </section>
 
@@ -160,7 +160,7 @@ ItemGlowAPI.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);</code></p
                         <span>Usage: Durability Check</span>
                         <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
                     </div>
-                    <pre><code><span class="keyword">float</span> durabilityPct = ItemGlowAPI.getPct(stack);
+                    <pre><code><span class="keyword">float</span> durabilityPct = ItemGlowApi.getPct(stack);
 
 <span class="comment">// Example: Flash red if durability is below 10%</span>
 <span class="keyword">if</span> (durabilityPct &lt; <span class="keyword">0.10f</span>) {
