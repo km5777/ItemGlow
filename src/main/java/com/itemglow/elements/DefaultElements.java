@@ -20,6 +20,10 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.util.Identifier;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.entity.decoration.painting.PaintingVariant;
+import net.minecraft.registry.Registries;
+import net.minecraft.component.ComponentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +77,7 @@ public class DefaultElements {
                 pills.add(new Pill("Bad Omen " + (stack.get(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER) + 1), 0x80400000, 0xFFFF5555, false));
             } else {
                 Item.TooltipContext tctx = client.world != null ? Item.TooltipContext.create(client.world.getRegistryManager()) : Item.TooltipContext.DEFAULT;
-                List<Text> lines = stack.getTooltip(tctx, client.player, TooltipType.BASIC);
+                List<Text> lines = stack.getTooltip(tctx, client.player, TooltipType.Default.BASIC);
                 String info = "";
                 for (int i = 1; i < lines.size(); i++) {
                     String t = lines.get(i).getString().trim();
@@ -107,21 +111,14 @@ public class DefaultElements {
                     if (item == Items.GOAT_HORN) pills.add(new Pill(info, 0x8000008B, 0xFF5555FF, false));
                     else if (item == Items.PAINTING) {
                         int bw = 0, bh = 0;
-                        if (stack.contains(DataComponentTypes.ENTITY_DATA)) {
-                            var nbtComp = stack.get(DataComponentTypes.ENTITY_DATA);
-                            if (nbtComp != null) {
-                                var nbt = nbtComp.copyNbt();
-                                if (nbt.contains("variant", 8)) {
-                                    Identifier varId = Identifier.tryParse(nbt.getString("variant"));
-                                    if (varId != null && client.world != null) {
-                                        var registry = client.world.getRegistryManager().get(net.minecraft.registry.RegistryKeys.PAINTING_VARIANT);
-                                        var variant = registry.get(varId);
-                                        if (variant != null) {
-                                            bw = variant.width() / 16;
-                                            bh = variant.height() / 16;
-                                        }
-                                    }
-                                }
+                        @SuppressWarnings("unchecked")
+                        ComponentType<RegistryEntry<PaintingVariant>> paintingVariantType = (ComponentType<RegistryEntry<PaintingVariant>>) Registries.DATA_COMPONENT_TYPE.get(Identifier.of("minecraft", "painting_variant"));
+                        RegistryEntry<PaintingVariant> variantEntry = stack.get(paintingVariantType);
+                        if (variantEntry != null) {
+                            var variant = variantEntry.value();
+                            if (variant != null) {
+                                bw = variant.width() / 16;
+                                bh = variant.height() / 16;
                             }
                         }
                         if (bw > 0 && bh > 0) {
