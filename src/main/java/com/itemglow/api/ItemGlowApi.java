@@ -14,6 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemGlowApi {
+    public interface ItemGlowProvider {
+        List<TooltipLine> getLines(ItemStack stack);
+    }
+
+    public record TooltipLine(Text text, int color, int priority) {}
+
+    public static final List<ItemGlowProvider> PROVIDERS = new ArrayList<>();
     private static final Map<Identifier, HudElement> ELEMENTS = new HashMap<>();
     private static final Map<Identifier, HudPanel> PANELS = new HashMap<>();
     private static Identifier activeProfile = Identifier.of("itemglow", "default");

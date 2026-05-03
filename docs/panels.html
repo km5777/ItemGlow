@@ -91,7 +91,7 @@
                     </div>
                     <pre><code><span class="keyword">public void</span> <span class="function">applyCustomLayout</span>() {
     <span class="comment">// 1. Create the panel</span>
-    ItemGlowApi.HudPanel myHud = <span class="keyword">new</span> ItemGlowApi.HudPanel(Identifier.of(<span class="string">"mymod"</span>, <span class="string">"minimal"</span>));
+    ItemGlowAPI.HudPanel myHud = <span class="keyword">new</span> ItemGlowAPI.HudPanel(Identifier.of(<span class="string">"mymod"</span>, <span class="string">"minimal"</span>));
     
     <span class="comment">// 2. Add elements</span>
     myHud.addElement(<span class="keyword">new</span> NameLineElement());
@@ -100,7 +100,7 @@
     myHud.setDimensions(<span class="keyword">120</span>, <span class="keyword">25</span>);
     
     <span class="comment">// 4. Register as the active panel</span>
-    ItemGlowApi.registerPanel(myHud);
+    ItemGlowAPI.registerPanel(myHud);
 }</code></pre>
                 </div>
 
@@ -119,9 +119,9 @@
                     </div>
                     <pre><code><span class="comment">// Example: Swapping to a minimal HUD when holding an Enchanted Book</span>
 <span class="keyword">if</span> (curMain.isOf(Items.ENCHANTED_BOOK)) {
-    com.itemglow.api.ItemGlowApi.registerProfile(Identifier.of(<span class="string">"mymod"</span>, <span class="string">"minimal"</span>));
+    com.itemglow.api.ItemGlowAPI.registerProfile(Identifier.of(<span class="string">"mymod"</span>, <span class="string">"minimal"</span>));
 } <span class="keyword">else</span> {
-    com.itemglow.api.ItemGlowApi.registerProfile(Identifier.of(<span class="string">"itemglow"</span>, <span class="string">"default"</span>));
+    com.itemglow.api.ItemGlowAPI.registerProfile(Identifier.of(<span class="string">"itemglow"</span>, <span class="string">"default"</span>));
 }</code></pre>
                 </div>
             </section>

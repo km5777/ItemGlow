@@ -27,7 +27,6 @@ import java.util.function.Function;
 
 public class ItemGlowMod implements ClientModInitializer {
     public static ItemGlowConfig config = ItemGlowConfig.load();
-    public static final List<ItemGlowAPI.ItemGlowProvider> API_PROVIDERS = new ArrayList<>();
 
 
     private static ItemStack mainStack = ItemStack.EMPTY;
@@ -53,6 +52,7 @@ public class ItemGlowMod implements ClientModInitializer {
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.NameLineElement());
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.CooldownArcElement());
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.SubtitleLineElement());
+        mainPanel.addElement(new com.itemglow.elements.DefaultElements.ApiIntegrationElement());
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.EnchantRowElement());
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.DurabilityBarElement());
         

@@ -241,4 +241,31 @@ public class DefaultElements {
             return height > 0 ? height + 2 : 0;
         }
     }
+
+    public static class ApiIntegrationElement implements ItemGlowApi.HudElement {
+        @Override public Identifier getId() { return Identifier.of("itemglow", "api_integration"); }
+        @Override public int render(DrawContext ctx, MinecraftClient client, ItemStack stack, int x, int y, int mW, float alpha, float ageSinceEquip) {
+            List<ItemGlowApi.TooltipLine> allLines = new ArrayList<>();
+            for (ItemGlowApi.ItemGlowProvider provider : ItemGlowApi.PROVIDERS) {
+                try {
+                    List<ItemGlowApi.TooltipLine> lines = provider.getLines(stack);
+                    if (lines != null) allLines.addAll(lines);
+                } catch (Exception e) {
+                    // Prevent one bad mod from crashing the HUD
+                }
+            }
+
+            if (allLines.isEmpty()) return 0;
+
+            // Sort by priority (highest first)
+            allLines.sort((a, b) -> Integer.compare(b.priority(), a.priority()));
+
+            List<Pill> pills = new ArrayList<>();
+            for (ItemGlowApi.TooltipLine line : allLines) {
+                pills.add(new Pill(line.text().getString(), 0x80333333, line.color(), false));
+            }
+
+            return ItemGlowApi.renderPills(ctx, client, stack, pills, x, y, mW, alpha);
+        }
+    }
 }

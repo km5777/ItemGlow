@@ -45,7 +45,7 @@
 
             <section>
                 <h2>The Provider Pattern</h2>
-                <p>I designed the Integration API to be "Fire and Forget." You implement a provider, return your data as simple records, and I handle the layout, animations, and aesthetic styling.</p>
+                <p>I designed the Integration API to be "Fire and Forget." You implement a provider, return your data as simple records, and I handle the layout, animations, and aesthetic styling. <strong>Lines provided through this API are automatically rendered as "Pills" (rounded badges) to ensure they match the Item Glow design system.</strong></p>
                 
                 <div class="code-wrapper">
                     <div class="code-header">
@@ -119,7 +119,7 @@
                 <h3>Registration</h3>
                 <p>Add your provider to the global registry in your client initializer:</p>
                 <div class="code-wrapper">
-                    <pre><code>ItemGlowMod.API_PROVIDERS.add(<span class="keyword">new</span> ManaIntegration());</code></pre>
+                    <pre><code>ItemGlowApi.PROVIDERS.add(<span class="keyword">new</span> ManaIntegration());</code></pre>
                 </div>
             </section>
 

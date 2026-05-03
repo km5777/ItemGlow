@@ -139,7 +139,7 @@
                         <button class="copy-btn" onclick="copyCode(this)">Copy <i
                                 class="fa-regular fa-copy"></i></button>
                     </div>
-                    <pre><code id="code-block"><span class="keyword">public static class</span> ManaBarElement <span class="keyword">implements</span> ItemGlowApi.HudElement {
+                    <pre><code id="code-block"><span class="keyword">public static class</span> ManaBarElement <span class="keyword">implements</span> ItemGlowAPI.HudElement {
     <span class="keyword">@Override</span>
     <span class="keyword">public</span> Identifier <span class="function">getId</span>() { <span class="keyword">return</span> Identifier.of(<span class="string">"mymod"</span>, <span class="string">"mana_bar"</span>); }
 
@@ -166,6 +166,25 @@
                 <div class="demo-image-wrapper" style="margin-top: 2rem;">
                     <img src="images/manabar.png" alt="Pulsing Mana Bar Example" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); aspect-ratio: 16/9; object-fit: cover; cursor: pointer;">
                     <p style="font-size: 0.9rem; text-align: center; font-style: italic; margin-top: 0.75rem;">Figure 1.0: A custom Mana Bar element integrated into the Item Glow HUD, showing a low-mana pulse effect.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>Registration</h2>
+                <p>Once you've created your <code>HudElement</code>, you need to tell Item Glow where to render it. You can either create a completely new layout (see <a href="panels.html">HUD Panels</a>) or simply append your element to the default HUD.</p>
+                
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>Registration Code</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code><span class="comment">// 1. Get the default panel</span>
+HudPanel def = ItemGlowApi.getPanel(Identifier.of(<span class="string">"itemglow"</span>, <span class="string">"default"</span>));
+
+<span class="comment">// 2. Append your element</span>
+<span class="keyword">if</span> (def != <span class="keyword">null</span>) {
+    def.addElement(<span class="keyword">new</span> ManaBarElement());
+}</code></pre>
                 </div>
             </section>
 
