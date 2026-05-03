@@ -7,7 +7,12 @@
 	"authors": [
 		"K_M577"
 	],
-	"contact": {},
+	"contact": {
+		"wiki": "https://km5777.github.io/ItemGlow/",
+		"sources": "https://github.com/km5777/ItemGlow",
+		"issues": "https://github.com/km5777/ItemGlow/issues",
+		"donation": "https://www.paypal.com/donate?token=elNZNapST-z28m88rwdBxMGMxu9C6HetcvJuNdJtdSLSRm9uwXEztr6x9mjz3IVpQAAoOzdnhNLRsZ26&locale.x=US"
+	},
 	"license": "MIT",
 	"icon": "assets/itemglow/icon.png",
 	"environment": "client",
