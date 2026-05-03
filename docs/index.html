@@ -97,7 +97,24 @@
 }
 
 dependencies {
-    modImplementation <span class="string">'com.github.km5777:ItemGlow:v1.21.1-2.0.0'</span>
+    modImplementation <span class="string">'com.github.km5777:ItemGlow:v1.0.1'</span>
+}</code></pre>
+                </div>
+
+                <h3>Modern Setup (settings.gradle)</h3>
+                <p>If your project uses centralized repository management, add JitPack to your <code>settings.gradle</code> instead:</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>settings.gradle</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i
+                                class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code>dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven { url <span class="string">'https://jitpack.io'</span> }
+    }
 }</code></pre>
                 </div>
 
