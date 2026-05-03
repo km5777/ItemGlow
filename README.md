@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/images/logo.png" width="250" alt="Item Glow Logo" style="border-radius: 15px;"/>
+  <img src="docs/images/logo.png" width="250" alt="Item Glow Logo" style="border-radius: 20px;"/>
   <h1>Item Glow</h1>
   <p>A functional and highly customizable item HUD for Minecraft 1.21.1 - 1.21.11</p>
 
@@ -20,12 +20,12 @@ Item Glow is a client-side mod that displays essential information about the ite
 
 ### Key Features
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
   <tr>
-    <td width="55%" align="center" valign="middle">
-      <img src="docs/images/netherritesword.png" width="450" style="border-radius: 15px;"/>
+    <td width="55%" align="center" valign="middle" style="border: none;">
+      <img src="docs/images/netherritesword.png" width="450" style="border-radius: 20px;"/>
     </td>
-    <td width="45%" valign="middle" style="padding-left: 20px;">
+    <td width="45%" valign="middle" style="padding-left: 20px; border: none;">
       <h4>🛡️ Combat Info & Durability</h4>
       <p>See exactly how many uses are left on your tools and armor. I've included a color-coded bar and numerical values that update in real-time as you use your gear.</p>
     </td>
@@ -34,26 +34,26 @@ Item Glow is a client-side mod that displays essential information about the ite
 
 <br/>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
   <tr>
-    <td width="45%" valign="middle" style="padding-right: 20px;">
+    <td width="45%" valign="middle" style="padding-right: 20px; border: none;">
       <h4>📜 Enchantment & Effect Cycling</h4>
       <p>If an item has multiple enchantments or potion effects, the HUD cycles through them automatically. It keeps the screen uncluttered while making sure you know exactly what you're holding.</p>
     </td>
-    <td width="55%" align="center" valign="middle">
-      <img src="docs/images/enchantbookpill.png" width="450" style="border-radius: 15px;"/>
+    <td width="55%" align="center" valign="middle" style="border: none;">
+      <img src="docs/images/enchantbookpill.png" width="450" style="border-radius: 20px;"/>
     </td>
   </tr>
 </table>
 
 <br/>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
   <tr>
-    <td width="55%" align="center" valign="middle">
-      <img src="docs/images/goldapple.png" width="450" style="border-radius: 15px;"/>
+    <td width="55%" align="center" valign="middle" style="border: none;">
+      <img src="docs/images/goldapple.png" width="450" style="border-radius: 20px;"/>
     </td>
-    <td width="45%" valign="middle" style="padding-left: 20px;">
+    <td width="45%" valign="middle" style="padding-left: 20px; border: none;">
       <h4>🍎 Food & Utility Data</h4>
       <p>Holding food? You'll see nutrition and saturation values. Holding a painting? You'll see its size and variant before placing it. I've added support for many special items like Golden Apples and Suspicious Stews.</p>
     </td>
@@ -73,33 +73,37 @@ I wanted this mod to fit any UI style, so almost everything is configurable via 
 ---
 
 ### For Developers
-I've designed Item Glow to be a platform for other modders. If you're building a mod and want your custom item data to show up in a beautiful HUD, you can use my API.
+I've designed Item Glow to be a platform for other modders. If you're building a mod and want your custom item data to show up in my HUD, you can use the built-in provider system.
 
 #### Integration API
-Adding your own data "Elements" to the HUD is straightforward. Here's a quick example:
+To add your own data to the HUD, simply add a new provider to the `ItemGlowApi.PROVIDERS` list. Here's how you can do it:
 
 ```java
-// Registering a custom Mana Element
-ItemGlowApi.registerProvider((stack, player) -> {
+// Registering a custom data provider
+ItemGlowApi.PROVIDERS.add(stack -> {
     if (stack.getItem() instanceof ManaWand) {
-        return new ManaElement(stack.get(MANA_COMPONENT));
+        return List.of(new ItemGlowApi.TooltipLine(
+            Text.literal("Mana: 50/100"), 
+            0x55FFFF, // Color
+            100       // Priority
+        ));
     }
     return null;
 });
 ```
 
 #### Why Integrate?
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: none; border-collapse: collapse;">
   <tr>
-    <td width="60%" valign="top">
+    <td width="45%" valign="middle" style="padding-right: 20px; border: none;">
       <ul>
         <li><b>Zero UI Conflict:</b> Your data renders in a style consistent with the rest of the HUD.</li>
         <li><b>User Preference:</b> Users can scale, move, and toggle your data just like native elements.</li>
         <li><b>Efficiency:</b> I've optimized the rendering engine to ensure minimal impact on performance.</li>
       </ul>
     </td>
-    <td width="40%" align="center" valign="top">
-      <img src="docs/images/manabar.png" width="250" style="border-radius: 12px;"/>
+    <td width="55%" align="center" valign="middle" style="border: none;">
+      <img src="docs/images/manabar.png" width="450" style="border-radius: 20px;"/>
     </td>
   </tr>
 </table>
