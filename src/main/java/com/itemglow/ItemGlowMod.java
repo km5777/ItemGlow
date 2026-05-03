@@ -29,14 +29,11 @@ public class ItemGlowMod implements ClientModInitializer {
     public static ItemGlowConfig config = ItemGlowConfig.load();
     public static final List<ItemGlowAPI.ItemGlowProvider> API_PROVIDERS = new ArrayList<>();
 
-    private static final Identifier FOOD_FULL = Identifier.ofVanilla("hud/food_full");
-    private static final Identifier FOOD_HALF = Identifier.ofVanilla("hud/food_half");
 
     private static ItemStack mainStack = ItemStack.EMPTY;
     private static ItemStack outgoingStack = ItemStack.EMPTY;
     private static float mainTimer = 0f;
     private static float switchProgress = 1.0f;
-    private static float visualMainPct = -1.0f;
     private static float outgoingOpacityMult = 0f;
     private static ItemStack offStack = ItemStack.EMPTY;
     private static float offTimer = 0f;
@@ -58,6 +55,8 @@ public class ItemGlowMod implements ClientModInitializer {
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.SubtitleLineElement());
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.EnchantRowElement());
         mainPanel.addElement(new com.itemglow.elements.DefaultElements.DurabilityBarElement());
+        
+
         com.itemglow.api.ItemGlowApi.registerPanel(mainPanel);
         com.itemglow.api.ItemGlowApi.registerProfile(Identifier.of("itemglow", "default"));
 
@@ -80,7 +79,6 @@ public class ItemGlowMod implements ClientModInitializer {
                     mainStack = curMain.copy();
                     mainTimer = config.fadeDelaySeconds;
                     mainEquipAge = client.player.age;
-                    visualMainPct = com.itemglow.api.ItemGlowApi.getPct(mainStack);
                 } else {
                     mainStack = curMain.copy();
                     if (!config.constantVisibility && (config.showDurabilityBar || config.showDurabilityText)) mainTimer = config.fadeDelaySeconds;
@@ -88,6 +86,7 @@ public class ItemGlowMod implements ClientModInitializer {
             }
             ItemStack curOff = client.player.getOffHandStack();
             if (!ItemStack.areItemsAndComponentsEqual(offStack, curOff)) { offStack = curOff.copy(); offTimer = config.fadeDelaySeconds; offEquipAge = client.player.age; }
+
         });
 
         HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
@@ -119,7 +118,10 @@ public class ItemGlowMod implements ClientModInitializer {
         int alpha = (int) (opacity * 255);
         if (alpha < 1) return;
 
-        int pw = config.panelWidth; int ph = config.panelHeight;
+        com.itemglow.api.ItemGlowApi.HudPanel activePanel = com.itemglow.api.ItemGlowApi.getPanel(com.itemglow.api.ItemGlowApi.getActiveProfile());
+        int pw = activePanel != null ? activePanel.getWidth(config.panelWidth) : config.panelWidth; 
+        int ph = activePanel != null ? activePanel.getHeight(config.panelHeight) : config.panelHeight;
+        
         float s = isOff ? config.scale * 0.85f : config.scale;
         int sw = (int)(pw * s); int sh = (int)(ph * s);
         int screenW = client.getWindow().getScaledWidth(); int screenH = client.getWindow().getScaledHeight();
@@ -153,7 +155,6 @@ public class ItemGlowMod implements ClientModInitializer {
             cL += 18;
         }
 
-        com.itemglow.api.ItemGlowApi.HudPanel activePanel = com.itemglow.api.ItemGlowApi.getPanel(com.itemglow.api.ItemGlowApi.getActiveProfile());
         if (activePanel != null) {
             activePanel.render(context, client, stack, cL, 5, pw - cL - 10, opacity, ageSinceEquip);
         }

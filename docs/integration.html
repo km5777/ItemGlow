@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod Integration - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link active"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Developer API</div>
+                <h1>Simplified Integration</h1>
+                <p class="subtitle">The Integration API is the fastest way to inject your mod's data into the Item Glow HUD without writing custom rendering logic.</p>
+            </header>
+
+            <section>
+                <h2>The Provider Pattern</h2>
+                <p>I designed the Integration API to be "Fire and Forget." You implement a provider, return your data as simple records, and I handle the layout, animations, and aesthetic styling.</p>
+                
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>ItemGlowProvider.java</span>
+                    </div>
+                    <pre><code><span class="keyword">public interface</span> ItemGlowProvider {
+    <span class="comment">// Returns a list of lines to be appended to the HUD</span>
+    List&lt;TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack);
+}</code></pre>
+                </div>
+
+                <h3>Data Record: TooltipLine</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>text</code></td>
+                                <td><code>Text</code></td>
+                                <td>The stylized text to display.</td>
+                            </tr>
+                            <tr>
+                                <td><code>color</code></td>
+                                <td><code>int</code></td>
+                                <td>24-bit RGB color. Alpha is handled by the mod.</td>
+                            </tr>
+                            <tr>
+                                <td><code>priority</code></td>
+                                <td><code>int</code></td>
+                                <td>Higher values appear further up in the HUD.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>Implementation Walkthrough</h2>
+                <p>Let's say you have a "Mana" mod and want to show an item's mana cost on the HUD.</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>ManaIntegration.java</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code id="code-block"><span class="keyword">public class</span> ManaIntegration <span class="keyword">implements</span> ItemGlowAPI.ItemGlowProvider {
+    <span class="keyword">@Override</span>
+    <span class="keyword">public</span> List&lt;ItemGlowAPI.TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack) {
+        List&lt;ItemGlowAPI.TooltipLine&gt; lines = <span class="keyword">new</span> ArrayList&lt;&gt;();
+
+        <span class="keyword">if</span> (stack.contains(ManaMod.COST_COMPONENT)) {
+            <span class="keyword">int</span> cost = stack.get(ManaMod.COST_COMPONENT);
+            lines.add(<span class="keyword">new</span> ItemGlowAPI.TooltipLine(
+                Text.literal(<span class="string">"Cost: "</span> + cost + <span class="string">" Mana"</span>), 
+                <span class="string">0x55AAFF</span>, 
+                <span class="keyword">150</span>
+            ));
+        }
+
+        <span class="keyword">return</span> lines;
+    }
+}</code></pre>
+                </div>
+
+                <h3>Registration</h3>
+                <p>Add your provider to the global registry in your client initializer:</p>
+                <div class="code-wrapper">
+                    <pre><code>ItemGlowMod.API_PROVIDERS.add(<span class="keyword">new</span> ManaIntegration());</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>The Scraper Technique</h2>
+                <p>If you need to extract data from a mod that doesn't have an API, you can "scrape" its vanilla tooltips. This is the ultimate fallback for universal compatibility.</p>
+                
+                <div class="code-wrapper">
+                    <pre><code><span class="keyword">public class</span> Scraper <span class="keyword">implements</span> ItemGlowAPI.ItemGlowProvider {
+    <span class="keyword">@Override</span>
+    <span class="keyword">public</span> List&lt;ItemGlowAPI.TooltipLine&gt; <span class="function">getLines</span>(ItemStack stack) {
+        <span class="comment">// Force tooltip generation</span>
+        <span class="keyword">var</span> tooltip = stack.getTooltip(..., TooltipType.BASIC);
+        
+        <span class="comment">// Look for specific keywords</span>
+        <span class="keyword">return</span> tooltip.stream()
+            .filter(t -&gt; t.getString().contains(<span class="string">"Weight:"</span>))
+            .map(t -&gt; <span class="keyword">new</span> ItemGlowAPI.TooltipLine(t, <span class="string">0xAAAAAA</span>, <span class="keyword">50</span>))
+            .toList();
+    }
+}</code></pre>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="utils.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> Rendering Utils</span>
+                </a>
+                <div style="width: 48%;"></div>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendering Utils - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link active"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Developer API</div>
+                <h1>Rendering Utilities</h1>
+                <p class="subtitle">I've exposed my internal rendering toolkit to ensure your custom elements match the Item Glow aesthetic perfectly.</p>
+            </header>
+
+            <section>
+                <h2>The Fit-to-Width Text Engine</h2>
+                <p>One of the hardest parts of a HUD is dealing with long strings. I've built a specialized method that handles scaling automatically.</p>
+                
+                <div class="api-method">
+                    <div class="code-wrapper">
+                        <pre><code><span class="keyword">public static void</span> <span class="function">drawScaledText</span>(DrawContext ctx, MinecraftClient c, Text t, 
+                                 <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> mW, <span class="keyword">int</span> col)</code></pre>
+                    </div>
+                    <p>This method measures the text width. If it's wider than <code>mW</code> (max width), it calculates a precise scale factor, applies a matrix transformation, renders the text, and pops the matrix back. This ensures names like <em>"Infinity Super-Charged Diamond Pickaxe of the Void"</em> never overflow your HUD.</p>
+                </div>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>Usage: Custom Subtitle</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code><span class="keyword">@Override</span>
+<span class="keyword">public int</span> <span class="function">render</span>(DrawContext ctx, MinecraftClient client, ItemStack stack, <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> mW, <span class="keyword">float</span> alpha, <span class="keyword">float</span> age) {
+    Text customText = Text.literal(<span class="string">"Legendary Artifact of the Ancient Kings"</span>);
+    <span class="keyword">int</span> color = (<span class="keyword">int</span>)(alpha * <span class="keyword">255</span>) &lt;&lt; <span class="keyword">24</span> | <span class="keyword">0xFFAA00</span>;
+    
+    <span class="comment">// This will automatically shrink the long string to fit within mW</span>
+    ItemGlowApi.drawScaledText(ctx, client, customText, x, y, mW, color);
+    
+    <span class="keyword">return</span> <span class="keyword">10</span>;
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>The Pill System</h2>
+                <p>My signature "Pill" design is modular. A Pill is a small data record that contains text, background color, and metadata.</p>
+                
+                <div class="code-wrapper">
+                    <pre><code><span class="keyword">public record</span> Pill(String text, <span class="keyword">int</span> bg, <span class="keyword">int</span> fg, <span class="keyword">boolean</span> isFood, 
+                   <span class="keyword">float</span> alphaMult, <span class="keyword">float</span> yOffset, <span class="keyword">boolean</span> advanceSlot)</code></pre>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>renderPills(...)</code></td>
+                                <td>The main layout engine for pills. Handles background drawing, food icons, and vertical wrapping.</td>
+                            </tr>
+                            <tr>
+                                <td><code>addCyclePills(...)</code></td>
+                                <td>Enables the smooth "scrolling" effect when you have more information than can fit on one line.</td>
+                            </tr>
+                            <tr>
+                                <td><code>drawCustomPill(...)</code></td>
+                                <td>Draws a single, standalone pill at specific coordinates. Used by the high-level engines.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="carousel-wrapper" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div class="demo-image-wrapper" style="margin: 0;">
+                        <img src="images/netherritesword.png" alt="Static Pills" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <p style="font-size: 0.85rem; margin-top: 0.75rem;"><strong>renderPills:</strong> Static layout showing standard enchantments.</p>
+                    </div>
+                    <div class="demo-image-wrapper" style="margin: 0;">
+                        <img src="images/enchantbookpill.png" alt="Animated Pills" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <p style="font-size: 0.85rem; margin-top: 0.75rem;"><strong>addCyclePills:</strong> Animated scrolling for overflowing content.</p>
+                    </div>
+                    <div class="demo-image-wrapper" style="margin: 0;">
+                        <img src="images/goldapple.png" alt="Custom Pills" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <p style="font-size: 0.85rem; margin-top: 0.75rem;"><strong>drawCustomPill:</strong> Specialized rendering with custom icons.</p>
+                    </div>
+                    <div class="demo-image-wrapper" style="margin: 0;">
+                        <img src="images/netherstar.png" alt="Pill System Test" style="width: 100%; border-radius: 12px; border: 1px solid var(--border);">
+                        <p style="font-size: 0.85rem; margin-top: 0.75rem;"><strong>Verification:</strong> The Nether Star test confirming the Pill System logic.</p>
+                    </div>
+                </div>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>Usage: Complex Pill Layout</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code><span class="keyword">List</span>&lt;Pill&gt; myPills = <span class="keyword">new</span> ArrayList&lt;&gt;();
+myPills.add(<span class="keyword">new</span> Pill(<span class="string">"Soul Bound"</span>, <span class="keyword">0x5500AAFF</span>, <span class="keyword">0xFFFFFF</span>, <span class="keyword">false</span>, alpha, <span class="keyword">0</span>, <span class="keyword">true</span>));
+
+<span class="comment">// 1. Basic rendering</span>
+<span class="keyword">int</span> heightUsed = ItemGlowApi.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);
+
+<span class="comment">// 2. OR: Use addCyclePills for scrolling animations</span>
+<span class="keyword">List</span>&lt;<span class="keyword">String</span>&gt; overflowItems = List.of(<span class="string">"Effect 1"</span>, <span class="string">"Effect 2"</span>, <span class="string">"Effect 3"</span>);
+ItemGlowApi.addCyclePills(myPills, overflowItems, <span class="keyword">0x555555</span>, <span class="keyword">0xFFFFFF</span>, age, <span class="keyword">2.0f</span>);
+ItemGlowApi.renderPills(ctx, client, stack, myPills, x, y, mW, alpha);</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Math & Data Helpers</h2>
+                <p>I've included several helpers to simplify common Minecraft UI tasks:</p>
+                
+                <div class="api-method">
+                    <div class="code-wrapper">
+                        <pre><code><span class="keyword">public static float</span> <span class="function">getPct</span>(ItemStack s)</code></pre>
+                    </div>
+                    <p>Returns the durability percentage (0.0 to 1.0) of an item stack. It handles non-damageable items by returning 1.0, making it safe for all inputs.</p>
+                </div>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>Usage: Durability Check</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code><span class="keyword">float</span> durabilityPct = ItemGlowApi.getPct(stack);
+
+<span class="comment">// Example: Flash red if durability is below 10%</span>
+<span class="keyword">if</span> (durabilityPct &lt; <span class="keyword">0.10f</span>) {
+    <span class="keyword">int</span> flashColor = (<span class="keyword">int</span>)(alpha * <span class="keyword">255</span>) &lt;&lt; <span class="keyword">24</span> | <span class="keyword">0xFF5555</span>;
+    ctx.fill(x, y, x + mW, y + <span class="keyword">2</span>, flashColor);
+}</code></pre>
+                </div>
+
+                <div class="callout tip">
+                    <i class="fa-solid fa-calculator"></i>
+                    <div class="callout-content">
+                        <h4>Alpha Management</h4>
+                        <p>When drawing using <code>DrawContext.fill()</code>, remember that colors are ARGB. Use <code>(int)(alpha * 255) << 24 | (color & 0xFFFFFF)</code> to correctly apply the HUD's current fade state.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="panels.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> HUD Panels</span>
+                </a>
+                <a href="integration.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">Mod Integration <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

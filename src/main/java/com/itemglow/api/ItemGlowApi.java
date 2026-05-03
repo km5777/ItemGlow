@@ -118,13 +118,19 @@ public class ItemGlowApi {
     }
 
     public static class HudPanel {
-        private final Identifier id;
+        public final Identifier id;
         private final List<HudElement> elements = new ArrayList<>();
+        private int customWidth = -1;
+        private int customHeight = -1;
         
         public HudPanel(Identifier id) { this.id = id; }
         public Identifier getId() { return id; }
         public void addElement(HudElement element) { elements.add(element); }
         public List<HudElement> getElements() { return elements; }
+
+        public HudPanel setDimensions(int w, int h) { this.customWidth = w; this.customHeight = h; return this; }
+        public int getWidth(int defaultW) { return customWidth > 0 ? customWidth : defaultW; }
+        public int getHeight(int defaultH) { return customHeight > 0 ? customHeight : defaultH; }
         
         public int render(DrawContext context, MinecraftClient client, ItemStack stack, int startX, int startY, int maxWidth, float alpha, float ageSinceEquip) {
             int currentY = startY;

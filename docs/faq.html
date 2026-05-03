@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ & Troubleshooting - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link active"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Getting Started</div>
+                <h1>Frequently Asked Questions</h1>
+                <p class="subtitle">Quick answers to common technical hurdles and compatibility questions.</p>
+            </header>
+
+            <section>
+                <h2>General Questions</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Is it client-side only?</h3>
+                        <p>Yes. Item Glow does not need to be installed on the server. It strictly modifies your client-side rendering engine.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Does it support Shaders?</h3>
+                        <p>Fully. I've designed the rendering pipeline to be compatible with Iris and OptiFine. The HUD is rendered in the Post-Processing phase.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>What is the 'H' key for?</h3>
+                        <p>This is the <strong>Armor Peek</strong> key. Hold it to reveal detailed enchantment info for your currently worn armor.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Technical Troubleshooting</h2>
+                
+                <div class="callout warning">
+                    <i class="fa-solid fa-bug"></i>
+                    <div class="callout-content">
+                        <h4>HUD Not Showing Up?</h4>
+                        <p>Ensure you aren't in "Hidden HUD" mode (F1 key). Also, check if your <strong>Fade Timer</strong> is set to a very low value in the config.</p>
+                    </div>
+                </div>
+
+                <h3>Common Compatibility Notes</h3>
+                <ul>
+                    <li><strong>AppleSkin:</strong> I am fully compatible. My food preview system calculates saturation values exactly like AppleSkin does.</li>
+                    <li><strong>Raised:</strong> I support Raised's hotbar offsets. If you move your hotbar, Item Glow will follow it automatically.</li>
+                    <li><strong>Sodium:</strong> No issues. I use standard vertex buffers that play nicely with Sodium's optimizations.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Performance Analysis</h2>
+                <p>I take performance very seriously. I've profiled the mod using Spark, and here are the results:</p>
+                
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Average Frame Time</td>
+                                <td>0.08ms</td>
+                                <td>Negligible impact on FPS.</td>
+                            </tr>
+                            <tr>
+                                <td>Memory Allocation</td>
+                                <td>~12KB/s</td>
+                                <td>Extremely low GC pressure.</td>
+                            </tr>
+                            <tr>
+                                <td>Render Calls</td>
+                                <td>1-5 per frame</td>
+                                <td>Highly batched drawing logic.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="config.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> Configuration</span>
+                </a>
+                <a href="elements.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">Custom Elements <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

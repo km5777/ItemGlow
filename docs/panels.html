@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUD Panels - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link active"><i class="fa-solid fa-window-maximize"></i> HUD
+                        Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Developer API</div>
+                <h1>HUD Panels & Layout</h1>
+                <p class="subtitle">Panels are the containers that organize your elements into a cohesive HUD layout.
+                    They handle the complex math of vertical stacking and dynamic resizing.</p>
+            </header>
+
+            <section>
+                <h2>The HudPanel Container</h2>
+                <p>A <code>HudPanel</code> is essentially a list of <code>HudElement</code> objects. When the HUD
+                    renders, it iterates through these elements in the order they were added.</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>HudPanel Class Structure</span>
+                    </div>
+                    <pre><code><span class="keyword">public static class</span> HudPanel {
+    <span class="keyword">private final</span> Identifier id;
+    <span class="keyword">private final</span> List&lt;HudElement&gt; elements = <span class="keyword">new</span> ArrayList&lt;&gt;();
+    
+    <span class="keyword">public</span> <span class="function">HudPanel</span>(Identifier id) { <span class="keyword">this</span>.id = id; }
+    <span class="keyword">public void</span> <span class="function">addElement</span>(HudElement element) { elements.add(element); }
+}</code></pre>
+                </div>
+
+                <h3>The Layout Algorithm</h3>
+                <p>I've implemented a <strong>Sequential Vertical Stacker</strong>. Here is how the panel calculates
+                    where each element goes:</p>
+                <div class="code-wrapper">
+                    <pre><code><span class="keyword">int</span> currentY = startY;
+<span class="keyword">for</span> (HudElement element : elements) {
+    <span class="comment">// Each element returns how much height it used</span>
+    <span class="keyword">int</span> heightUsed = element.render(..., currentY, ...);
+    currentY += heightUsed;
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Working Example: Custom Layout & Sizing</h2>
+                <p>If you want to completely replace the Item Glow HUD with your own design, you can define a new <code>HudPanel</code> and even override the global dimensions to create a "Mini-HUD".</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>CustomLayout.java</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code><span class="keyword">public void</span> <span class="function">applyCustomLayout</span>() {
+    <span class="comment">// 1. Create the panel</span>
+    ItemGlowApi.HudPanel myHud = <span class="keyword">new</span> ItemGlowApi.HudPanel(Identifier.of(<span class="string">"mymod"</span>, <span class="string">"minimal"</span>));
+    
+    <span class="comment">// 2. Add elements</span>
+    myHud.addElement(<span class="keyword">new</span> NameLineElement());
+    
+    <span class="comment">// 3. Set custom dimensions (Width: 120, Height: 25)</span>
+    myHud.setDimensions(<span class="keyword">120</span>, <span class="keyword">25</span>);
+    
+    <span class="comment">// 4. Register as the active panel</span>
+    ItemGlowApi.registerPanel(myHud);
+}</code></pre>
+                </div>
+
+                <div class="demo-image-wrapper">
+                    <img src="images/enchantbook.png" alt="Mini-HUD Example" style="width: 100%; border-radius: 12px; margin-top: 1rem; border: 1px solid var(--border);">
+                    <p style="font-size: 0.9rem; text-align: center; font-style: italic; margin-top: 0.5rem;">Figure 2.0: A custom Mini-HUD triggered when holding an Enchanted Book, utilizing setDimensions(120, 25).</p>
+                </div>
+
+                <h3>Triggering the Swap</h3>
+                <p>You can use standard Minecraft tick events or keybinds to swap profiles dynamically based on the player's context.</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>ProfileSwitcher.java</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code><span class="comment">// Example: Swapping to a minimal HUD when holding an Enchanted Book</span>
+<span class="keyword">if</span> (curMain.isOf(Items.ENCHANTED_BOOK)) {
+    com.itemglow.api.ItemGlowApi.registerProfile(Identifier.of(<span class="string">"mymod"</span>, <span class="string">"minimal"</span>));
+} <span class="keyword">else</span> {
+    com.itemglow.api.ItemGlowApi.registerProfile(Identifier.of(<span class="string">"itemglow"</span>, <span class="string">"default"</span>));
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h2>Visual Padding & Spacing</h2>
+                <p>To keep the HUD looking professional, I follow a strict padding grid. When building custom panels, I
+                    recommend following these spacing rules:</p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Element Type</th>
+                                <th>Recommended Return Height</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Single Text Line</td>
+                                <td><code>11</code></td>
+                                <td>Standard Minecraft text height (9px) + 2px gap.</td>
+                            </tr>
+                            <tr>
+                                <td>Horizontal Bar</td>
+                                <td><code>6</code></td>
+                                <td>Bar height (4px) + 2px gap.</td>
+                            </tr>
+                            <tr>
+                                <td>Pill Row</td>
+                                <td><code>Variable</code></td>
+                                <td>The <code>renderPills</code> utility calculates this for you.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="elements.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> Custom Elements</span>
+                </a>
+                <a href="utils.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">Rendering Utils <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

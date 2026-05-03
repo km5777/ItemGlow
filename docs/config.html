@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link active"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Getting Started</div>
+                <h1>HUD Configuration</h1>
+                <p class="subtitle">Item Glow is built on Cloth Config, offering an extensive set of options to tailor the HUD to your exact preferences.</p>
+            </header>
+
+            <section>
+                <h2>Configuration Methods</h2>
+                <p>I provide two ways to modify your settings. The recommended method is using the in-game GUI, but you can also edit the raw configuration file directly.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-desktop"></i>
+                        <h3>In-Game Menu</h3>
+                        <p>Requires <strong>Mod Menu</strong>. Simply click "Configure" on Item Glow in the mod list to open the visual editor.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-file-code"></i>
+                        <h3>Manual Edit</h3>
+                        <p>Edit the <code>config/itemglow.json</code> file in your Minecraft instance folder while the game is closed.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Parameter Reference</h2>
+                <p>Here is a detailed breakdown of the primary configuration categories and their technical effects.</p>
+                
+                <h3>1. Visual Style</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Default</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>accentColor</code></td>
+                                <td><code>#F59E0B</code></td>
+                                <td>The color of the thin vertical accent bar on the left side of the HUD.</td>
+                            </tr>
+                            <tr>
+                                <td><code>bgOpacity</code></td>
+                                <td><code>0.5</code></td>
+                                <td>Transparency of the main HUD background (0.0 to 1.0).</td>
+                            </tr>
+                            <tr>
+                                <td><code>scale</code></td>
+                                <td><code>1.0</code></td>
+                                <td>Global scale of the HUD. This uses matrix scaling (DPI-aware).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>2. Behavior & Animations</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Default</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>constantVisibility</code></td>
+                                <td><code>false</code></td>
+                                <td>If true, bypasses the fade-out logic and stays visible permanently.</td>
+                            </tr>
+                            <tr>
+                                <td><code>fadeDelaySeconds</code></td>
+                                <td><code>2.0</code></td>
+                                <td>How long the HUD stays visible after a trigger before fading.</td>
+                            </tr>
+                            <tr>
+                                <td><code>enableSlideIn</code></td>
+                                <td><code>true</code></td>
+                                <td>Enables the cubic vertical entrance animation on item swap.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>Anchor Positioning</h2>
+                <p>I've implemented a robust anchor system that ensures the HUD stays relative to screen edges regardless of your window size.</p>
+                
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>Anchor Logic</span>
+                    </div>
+                    <pre><code><span class="keyword">public enum</span> Anchor {
+    ABOVE_HOTBAR,
+    TOP_LEFT,
+    TOP_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT
+}</code></pre>
+                </div>
+
+                <div class="callout warning">
+                    <i class="fa-solid fa-exclamation-circle"></i>
+                    <div class="callout-content">
+                        <h4>Above Hotbar Offset</h4>
+                        <p>When set to <code>ABOVE_HOTBAR</code>, the HUD automatically detects if you have the XP bar or Mount Health bar visible and adjusts its Y-offset to avoid overlap.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="usage.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> Mod Features</span>
+                </a>
+                <a href="faq.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">FAQ <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

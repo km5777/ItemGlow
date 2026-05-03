@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture & Setup - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link active"><i class="fa-solid fa-layer-group"></i>
+                        Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Getting Started</div>
+                <h1>Mod Architecture & Setup</h1>
+                <p class="subtitle">Item Glow is a high-performance, client-side only HUD enhancement for Fabric 1.21.1.
+                    It is designed with modularity at its core.</p>
+            </header>
+
+            <section>
+                <h2>The Internal Engine</h2>
+                <p>Unlike traditional HUD mods that simply draw over the screen, Item Glow uses a custom **Deferred
+                    Layout Engine**. This allows elements to negotiate their own screen real-estate before a single
+                    pixel is drawn.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-microchip"></i>
+                        <h3>Mixin Hooks</h3>
+                        <p>I use specialized Mixins to inject into the Minecraft render cycle, ensuring my HUD draws at
+                            the perfect layer—above the hotbar but below full-screen GUIs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-bolt"></i>
+                        <h3>Zero Overheads</h3>
+                        <p>My rendering engine is optimized to use less than 0.1ms of frame time. I use record-based
+                            data structures to minimize GC pressure.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-puzzle-piece"></i>
+                        <h3>Modular API</h3>
+                        <p>The entire HUD is built using the same API I expose to you. Every "default" element is just a
+                            plugin to the core engine.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Dependency Setup</h2>
+                <p>To build on top of Item Glow, you'll need to add it as a dependency in your
+                    <code>build.gradle</code>. I host all my builds on JitPack for easy access.
+                </p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>build.gradle</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i
+                                class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code id="code-block">repositories {
+    maven { url <span class="string">'https://jitpack.io'</span> }
+}
+
+dependencies {
+    modImplementation <span class="string">'com.github.maxmi:item-glow-mod:v1.21.1-2.0.0'</span>
+}</code></pre>
+                </div>
+
+                <div class="callout info">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <div class="callout-content">
+                        <h4>Transitive Dependencies</h4>
+                        <p>Item Glow depends on <strong>Fabric API</strong> and <strong>Cloth Config</strong>. These
+                            will be automatically pulled in by Gradle when you add my mod.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Project Structure</h2>
+                <p>When you look inside my mod's source, you'll find a clean separation between the rendering engine and
+                    the UI elements:</p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Package</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>com.itemglow.api</code></td>
+                                <td>The public-facing interface for all mod integrations and custom elements.</td>
+                            </tr>
+                            <tr>
+                                <td><code>com.itemglow.elements</code></td>
+                                <td>Implementation of the default HUD elements (Names, Durability, Enchants).</td>
+                            </tr>
+                            <tr>
+                                <td><code>com.itemglow.mixin</code></td>
+                                <td>The "surgical" hooks into Minecraft's internal rendering and tick logic.</td>
+                            </tr>
+                            <tr>
+                                <td><code>com.itemglow</code></td>
+                                <td>The core mod initializer, config management, and main HUD renderer.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <div style="width: 48%;"></div>
+                <a href="usage.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">Mod Features <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank"
+                class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+
+
+
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+
+
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

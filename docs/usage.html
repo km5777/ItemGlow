@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod Features - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link active"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link"><i class="fa-solid fa-cubes"></i> Custom Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Getting Started</div>
+                <h1>Mod Features & Behavior</h1>
+                <p class="subtitle">Understanding how Item Glow reacts to your gameplay is key to mastering its customization options.</p>
+            </header>
+
+            <section>
+                <h2>The Visibility Logic</h2>
+                <p>The core of Item Glow is its intelligent visibility system. I've designed it to stay out of your way until you actually need to see your item's data.</p>
+                
+                <div class="callout tip">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <div class="callout-content">
+                        <h4>Constant Visibility</h4>
+                        <p>If enabled in the config, the HUD will never fade out. This is useful for players who want a permanent RPG-style dashboard.</p>
+                    </div>
+                </div>
+
+                <h3>How the Fade Timer Works</h3>
+                <p>By default, the HUD uses a <strong>Fade Timer</strong> (default: 2.0s). This timer is triggered by several game events:</p>
+                <ul>
+                    <li><strong>Item Swap:</strong> Switching between items in your hotbar resets the timer.</li>
+                    <li><strong>Durability Change:</strong> Using a tool or taking damage resets the timer to show your current status.</li>
+                    <li><strong>Inventory Change:</strong> Moving items into your active slots triggers a visibility pulse.</li>
+                </ul>
+                <p>Once the timer expires, the HUD performs a smooth cubic-ease-out animation to fade into transparency.</p>
+            </section>
+
+            <section>
+                <h2>Armor HUD System</h2>
+                <p>Item Glow isn't just for tools. It includes a comprehensive Armor HUD that tracks all four equipment slots simultaneously.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <h3>Durability Tracking</h3>
+                        <p>Every armor piece displays its health as a dynamic color-shifting bar directly next to the item icon.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-eye"></i>
+                        <h3>The Peek Mechanic</h3>
+                        <p>Hold the <strong>'H' key</strong> (customizable) to "peek" at your armor's enchantments without opening your inventory.</p>
+                    </div>
+                </div>
+
+                <div class="callout warning">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div class="callout-content">
+                        <h4>Performance Note</h4>
+                        <p>The Armor Peek feature uses a cached rendering system to ensure that looking at complex enchantment lists doesn't drop your FPS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Animation Systems</h2>
+                <p>I've implemented several micro-animations to make the HUD feel "alive":</p>
+                
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Animation</th>
+                                <th>Trigger</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Slide-In</code></td>
+                                <td>Item Switch</td>
+                                <td>The HUD slides up from the bottom when appearing.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Durability Pulse</code></td>
+                                <td>Low Durability</td>
+                                <td>The background flashes red when an item is below 20% health.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Info Rotation</code></td>
+                                <td>Multiple Enchants</td>
+                                <td>If an item has many enchantments, they cycle smoothly every few seconds.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="index.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> Architecture</span>
+                </a>
+                <a href="config.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">Configuration <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

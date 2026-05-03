@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Elements - Item Glow</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Item Glow Logo">
+                <span>Item Glow</span>
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Getting Started</div>
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-layer-group"></i> Architecture</a>
+                    <a href="usage.html" class="nav-link"><i class="fa-solid fa-gamepad"></i> Mod Features</a>
+                    <a href="config.html" class="nav-link"><i class="fa-solid fa-sliders"></i> Configuration</a>
+                    <a href="faq.html" class="nav-link"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Developer API</div>
+                    <a href="elements.html" class="nav-link active"><i class="fa-solid fa-cubes"></i> Custom
+                        Elements</a>
+                    <a href="panels.html" class="nav-link"><i class="fa-solid fa-window-maximize"></i> HUD Panels</a>
+                    <a href="utils.html" class="nav-link"><i class="fa-solid fa-wrench"></i> Rendering Utils</a>
+                    <a href="integration.html" class="nav-link"><i class="fa-solid fa-plug"></i> Mod Integration</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <header>
+                <div class="breadcrumb">Developer API</div>
+                <h1>The HudElement Engine</h1>
+                <p class="subtitle">Every piece of data on the HUD is a first-class citizen called a
+                    <code>HudElement</code>. This interface gives you total control over the rendering pipeline.
+                </p>
+            </header>
+
+            <section>
+                <h2>The HudElement Interface</h2>
+                <p>I've designed the element system to be functional and lightweight. An element is responsible for two
+                    things: identifying itself and rendering its content while returning the vertical space it occupied.
+                </p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>HudElement.java</span>
+                    </div>
+                    <pre><code><span class="keyword">public interface</span> HudElement {
+    Identifier <span class="function">getId</span>();
+    
+    <span class="comment">// Returns the height (in pixels) that this element consumed</span>
+    <span class="keyword">int</span> <span class="function">render</span>(DrawContext context, MinecraftClient client, ItemStack stack, 
+               <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> maxWidth, <span class="keyword">float</span> alpha, <span class="keyword">float</span> ageSinceEquip);
+}</code></pre>
+                </div>
+
+                <h3>Parameter Breakdown</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>x, y</code></td>
+                                <td>The absolute screen coordinates where your element should start drawing.</td>
+                            </tr>
+                            <tr>
+                                <td><code>maxWidth</code></td>
+                                <td>The boundary you should not exceed to maintain HUD visual integrity.</td>
+                            </tr>
+                            <tr>
+                                <td><code>alpha</code></td>
+                                <td>The 0.0-1.0 transparency value. You <strong>must</strong> apply this to your colors.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>ageSinceEquip</code></td>
+                                <td>Total ticks since the item was held. Perfect for time-based animations.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2>Default Elements Reference</h2>
+                <p>I've provided several built-in elements that you can reuse or extend. These are located in
+                    <code>com.itemglow.elements.DefaultElements</code>.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-font"></i>
+                        <h3>NameLineElement</h3>
+                        <p>Handles the primary item name rendering, including rarity colors and automatic font scaling
+                            for long names.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-battery-half"></i>
+                        <h3>DurabilityBarElement</h3>
+                        <p>Renders the health bar and durability text (e.g., "240 / 250") with color-shifting logic.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <h3>EnchantRowElement</h3>
+                        <p>The heavy lifter that renders enchantments, potion effects, and food data using the "Pill"
+                            system.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Working Example: Pulsing Mana Bar</h2>
+                <p>This is a complete, working example of an element that renders a blue mana bar that pulses when the
+                    player's mana (a hypothetical component) is low.</p>
+
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>ManaBarElement.java</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy <i
+                                class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <pre><code id="code-block"><span class="keyword">public static class</span> ManaBarElement <span class="keyword">implements</span> ItemGlowApi.HudElement {
+    <span class="keyword">@Override</span>
+    <span class="keyword">public</span> Identifier <span class="function">getId</span>() { <span class="keyword">return</span> Identifier.of(<span class="string">"mymod"</span>, <span class="string">"mana_bar"</span>); }
+
+    <span class="keyword">@Override</span>
+    <span class="keyword">public int</span> <span class="function">render</span>(DrawContext ctx, MinecraftClient client, ItemStack stack, 
+                      <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> mW, <span class="keyword">float</span> alpha, <span class="keyword">float</span> age) {
+        
+        <span class="keyword">float</span> mana = <span class="keyword">0.3f</span>; <span class="comment">// Scraped from your mod's data</span>
+        <span class="keyword">int</span> a = (<span class="keyword">int</span>)(alpha * <span class="keyword">255</span>);
+        
+        <span class="comment">// Calculate pulse effect using 'age'</span>
+        <span class="keyword">float</span> pulse = mana &lt; <span class="keyword">0.4f</span> ? (MathHelper.sin(age * <span class="keyword">0.5f</span>) + <span class="keyword">1.0f</span>) * <span class="keyword">0.5f</span> : <span class="keyword">0.0f</span>;
+        <span class="keyword">int</span> color = (a &lt;&lt; <span class="keyword">24</span>) | (<span class="keyword">int</span>)(pulse * <span class="keyword">100</span>) &lt;&lt; <span class="keyword">16</span> | <span class="keyword">0x55AAFF</span>;
+
+        <span class="comment">// Draw the background and bar</span>
+        ctx.fill(x, y + <span class="keyword">2</span>, x + mW, y + <span class="keyword">4</span>, (a / <span class="keyword">2</span> &lt;&lt; <span class="keyword">24</span>) | <span class="keyword">0x222222</span>);
+        ctx.fill(x, y + <span class="keyword">2</span>, x + (<span class="keyword">int</span>)(mW * mana), y + <span class="keyword">4</span>, color);
+
+        <span class="keyword">return</span> <span class="keyword">6</span>; <span class="comment">// We used 6 pixels of height</span>
+    }
+}</code></pre>
+                </div>
+
+                <div class="demo-image-wrapper" style="margin-top: 2rem;">
+                    <img src="images/manabar.png" alt="Pulsing Mana Bar Example" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); aspect-ratio: 16/9; object-fit: cover; cursor: pointer;">
+                    <p style="font-size: 0.9rem; text-align: center; font-style: italic; margin-top: 0.75rem;">Figure 1.0: A custom Mana Bar element integrated into the Item Glow HUD, showing a low-mana pulse effect.</p>
+                </div>
+            </section>
+
+            <footer class="footer-nav">
+                <a href="faq.html" class="nav-card prev">
+                    <span class="label">Previous</span>
+                    <span class="title"><i class="fa-solid fa-arrow-left"></i> FAQ</span>
+                </a>
+                <a href="panels.html" class="nav-card next">
+                    <span class="label">Next Up</span>
+                    <span class="title">HUD Panels <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </footer>
+        </main>
+
+        <aside class="right-sidebar">
+            <div class="nav-section-title">Community & Downloads</div>
+            
+            <a href="https://www.curseforge.com/minecraft/mc-mods/item-glow" target="_blank" class="platform-banner banner-curse">
+                <i class="fa-solid fa-fire icon"></i>
+                <div class="info">
+                    <h3>CurseForge</h3>
+                    <p>Download the latest stable release and join the community.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://modrinth.com/mod/item-glow-(java)" target="_blank" class="platform-banner banner-modrinth">
+                <i class="fa-solid fa-bolt icon"></i>
+                <div class="info">
+                    <h3>Modrinth</h3>
+                    <p>Experience faster downloads and support open-source platforms.</p>
+                </div>
+                <div class="btn">View Project</div>
+            </a>
+
+            <a href="https://github.com/km5777/ItemGlow" target="_blank" class="platform-banner banner-github">
+                <i class="fa-brands fa-github icon"></i>
+                <div class="info">
+                    <h3>GitHub Source</h3>
+                    <p>Explore the codebase, report bugs, or contribute to the project.</p>
+                </div>
+                <div class="btn">View Source</div>
+            </a>
+
+            <a href="https://url-shortener.curseforge.com/I23Lv" target="_blank" class="platform-banner banner-bisect">
+                <i class="fa-solid fa-server icon"></i>
+                <div class="info">
+                    <h3>Server Hosting</h3>
+                    <p>Create a server and get 25% off your first month with BisectHosting.</p>
+                </div>
+                <div class="btn">Create Server</div>
+            </a>
+        </aside>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
