@@ -64,6 +64,9 @@ public class DefaultElements {
         @Override public int render(DrawContext ctx, MinecraftClient client, ItemStack stack, int x, int y, int mW, float alpha, float ageSinceEquip) {
             if (!ItemGlowMod.config.showDetailedInfo) return 0;
             List<Pill> pills = new ArrayList<>();
+            if (ItemGlowMod.config.showStackCount && stack.getCount() > 1) {
+                pills.add(new Pill(stack.getCount() + "x Items", 0x80444444, 0xFFFFFFFF, false));
+            }
             Item item = stack.getItem();
             
             if (stack.contains(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER)) {
